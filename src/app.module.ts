@@ -18,34 +18,26 @@ imports: [
       isGlobal: true,
       load: [typeorm],
     }),
-    TypeOrmModule.forRoot({
-  type: 'postgres',
-  host: 'localhost',
-  port: 5432,
-  username: 'postgres',
-  password: '202628',
-  database: 'libro',
-  autoLoadEntities: true,
-}),
-    // TypeOrmModule.forRootAsync({
-    //   inject: [ConfigService],
-    //   useFactory: (config: ConfigService) => config.get('typeorm') ?? {},
-    // }),
-    // UsersModule,
-    // AuthModule,
-    // BooksModule,
-    // ReviewsModule,
-    // ExchangesModule,
-    // InvoicesModule,
   
-    //   JwtModule.register({
-    //   global: true,
-    //   secret: process.env.JWT_SECRET,
-    //   signOptions: { expiresIn: '1h' },
-    // }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => config.get('typeorm') ?? {},
+    }),
+    UsersModule,
+    AuthModule,
+    BooksModule,
+    ReviewsModule,
+    ExchangesModule,
+    InvoicesModule,
+  
+      JwtModule.register({
+      global: true,
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '1h' },
+    }),
   ],
-  controllers: [],
-  providers: [],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
 
