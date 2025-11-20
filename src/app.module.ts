@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import ormconfig from '../ormconfig';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { BooksModule } from './books/books.module';
@@ -9,10 +8,18 @@ import { ExchangesModule } from './exchanges/exchanges.module';
 import { InvoicesModule } from './invoices/invoices.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import typeorm from './Config/typeorm';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot(ormconfig as any),
+imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [typeorm],
+    }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => config.get('typeorm') ?? {},
+    }),
     UsersModule,
     AuthModule,
     BooksModule,
@@ -22,10 +29,6 @@ import { JwtModule } from '@nestjs/jwt';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => config.get('typeorm') ?? {},
-      }),
       JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,

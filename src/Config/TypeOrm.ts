@@ -3,19 +3,20 @@ import { config as dotenvConfig } from 'dotenv';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
 dotenvConfig({ path: '.env.development' });
-
+console.log(process.env.DB_NAME);
+console.log("Estoy aca");
 const config: DataSourceOptions = {
   type: 'postgres',
-  database: process.env.DB_NAME,
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  username: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
+  database: process.env.DATABASE_NAME,
+  host: process.env.DATABASE_HOST,
+  port: Number(process.env.DATABASE_PORT),
+  username: process.env.DATABASE_USERNAME,
+  password: process.env.DATABASE_PASSWORD,
   entities: ['dist/**/*.entity.js'],
   migrations: ['dist/migrations/*.js'],
-  logging: false,
-  synchronize: false,
-  dropSchema: false,
+  logging: true,
+  synchronize: true,
+  dropSchema: true,
   migrationsTableName: 'migrations_history',
 };
 export default registerAs('typeorm', () => config);
