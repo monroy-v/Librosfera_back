@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { BooksModule } from './books/books.module';
@@ -16,25 +18,34 @@ imports: [
       isGlobal: true,
       load: [typeorm],
     }),
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => config.get('typeorm') ?? {},
-    }),
-    UsersModule,
-    AuthModule,
-    BooksModule,
-    ReviewsModule,
-    ExchangesModule,
-    InvoicesModule,
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
-      JwtModule.register({
-      global: true,
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '1h' },
-    }),
+    TypeOrmModule.forRoot({
+  type: 'postgres',
+  host: 'localhost',
+  port: 5432,
+  username: 'postgres',
+  password: '202628',
+  database: 'libro',
+  autoLoadEntities: true,
+}),
+    // TypeOrmModule.forRootAsync({
+    //   inject: [ConfigService],
+    //   useFactory: (config: ConfigService) => config.get('typeorm') ?? {},
+    // }),
+    // UsersModule,
+    // AuthModule,
+    // BooksModule,
+    // ReviewsModule,
+    // ExchangesModule,
+    // InvoicesModule,
+  
+    //   JwtModule.register({
+    //   global: true,
+    //   secret: process.env.JWT_SECRET,
+    //   signOptions: { expiresIn: '1h' },
+    // }),
   ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
 

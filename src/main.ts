@@ -6,18 +6,17 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
-
-  const config = new DocumentBuilder()
-    .setTitle('Book Exchange API')
-    .setDescription('API para intercambio de libros')
-    .setVersion('1.0')
+  console.log("Cargando Swagger...");
+const options = new DocumentBuilder()
+    .setTitle('Back de e-commerce Javier Plata')
+    .setDescription('Esta es la api para el e-commerce de javier plata')
     .addBearerAuth()
     .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document);
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('api', app, document);
 
-  const port = process.env.PORT || 3000;
-  await app.listen(port);
-  console.log(`Listening on http://localhost:${port}`);
+  const port = process.env.development || 3000;
+  await app.listen(3000);
+  console.log(`Listening on http://localhost:3000`);
 }
 bootstrap();
